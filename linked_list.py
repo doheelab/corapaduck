@@ -1,4 +1,3 @@
-
 class node:
     def __init__(self, data=None):
         self.data=data
@@ -62,3 +61,13 @@ my_list = linked_list()
 my_list.append(1)
 
 my_list.erase(2)
+        
+l1 = linked_list()
+l1.append(2)
+l1.append(4)
+l1.append(3)
+
+l2 = linked_list()
+l2.append(5)
+l2.append(6)
+l2.append(4)
