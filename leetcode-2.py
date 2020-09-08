@@ -14,7 +14,7 @@ def longest(s):
         count.add(el)
     return len(s)
 
-# O(n)
+# O(n^2)
 def lengthOfLongestSubstring(s):
     result= 0
     for i in range(len(s)):
