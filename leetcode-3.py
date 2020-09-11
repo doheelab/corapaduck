@@ -1,69 +1,37 @@
-import heapq
+s = "cabbac"
 
-def merge(list1, list2):
-    # heap1, heap2 생성하기
-    heap1 = []
-    heap2 = []
-    for i in list1:
-        heapq.heappush(heap1, i)
-    for i in list2:
-        heapq.heappush(heap2, i)    
+def longestPalindrome(s):      
     
-    heapq.heappush(heap1, 10**6+1)
-    heapq.heappush(heap2, 10**6+1)
+    longest = s[0]
+    length = len(s)
     
-    result = []
-    item1 = heapq.heappop(heap1)
-    item2 = heapq.heappop(heap2)
+    # 길이가 1이하인 경우
+    if len(s)<=1:
+        return s
     
+    # palindromic 여부 저장
+    memo = [[None]*length for _ in range(length)]
     
-    while (heap1 or heap2):
-        if item1==10**6+1 and item2==10**6+1:
-            break
-        elif item1 > item2:
-            result.append(item2)
-            if heap2:
-                item2 = heapq.heappop(heap2)
-        elif item1 <= item2:
-            result.append(item1)
-            if heap1:                
-                item1 = heapq.heappop(heap1)
-    if item1 == 10**6+1:
-        result.append(item2)
-    else:
-        result.append(item1)
-    return result[:-1]
-
-
-def merge(list1, list2):
-    idx1 = 0
-    idx2 = 0
-    result = []
-    while idx1<len(list1) or idx2<len(list2):
-        if idx1<len(list1):
-            item1 = list1[idx1]
-        else:
-            item1 = 10**6+1
-        if idx2<len(list2):
-            item2 = list2[idx2]
-        else:
-            item2 = 10**6+1
-        if item1>item2:
-            result.append(item2)
-            idx2+=1
-        else:
-            result.append(item1)
-            idx1+=1
-    return result
-
-
-def findMedian(nums1, nums2):
-    merged = merge(nums1, nums2)
-    if len(merged)==0:
-        return 0
-    elif len(merged)%2==0:
-        return (merged[int(len(merged)/2)-1]+merged[int(len(merged)/2)])/2
-    elif len(merged)%2==1:
-        return merged[int(len(merged)/2)]
+    # memo 채우기 (대각 성분)
+    for i in range(length-1):
+        memo[i][i] = 1
+        memo[i][i+1] = int(s[i]==s[i+1])
         
-findMedian([1,2], [3,4,5])
+    memo[length-1][length-1] = 1
+    
+    # memo 채우기 (나머지)
+    for j in range(length, -1, -1):
+        for k in range(j+1, length):
+            # 양 끝의 문자가 같은 경우
+            if s[j] == s[k]:
+                if j+1>k-1:
+                    memo[j][k] = 1
+                else:
+                    memo[j][k] = memo[j+1][k-1]
+                # 가장 긴 부분문자열 발견한 경우
+                if memo[j][k] and (k-j+1 > len(longest)):
+                    longest = s[j:k+1]
+            else:
+                memo[j][k] = 0
+    return longest
+
